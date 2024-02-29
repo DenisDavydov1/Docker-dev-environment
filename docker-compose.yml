@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:1.25.3
+    container_name: nginx
+    restart: always
+    ports:
+      - 45680:80
+    volumes:
+      - ./data/nginx/conf:/etc/nginx/conf.d:ro
+      - ./data/nginx/app:/app:ro
+
+  ubuntu-amd64:
+    image: docker-dev-environment/ubuntu-amd64:latest
+    build:
+      context: ./dockerfiles/
+      dockerfile: Dockerfile.ubuntu-amd64
+    container_name: ubuntu-amd64
+    restart: always
+    tty: true
+    volumes:
+      - ./volumes/ubuntu-amd64:/root/volume:rw
+      - ~/.ssh:/root/.ssh:ro
+    environment:
+      - GITLAB_PACKAGE_REGISTRY_USERNAME=$GITLAB_PACKAGE_REGISTRY_USERNAME
+      - GITLAB_PACKAGE_REGISTRY_PASSWORD=$GITLAB_PACKAGE_REGISTRY_PASSWORD

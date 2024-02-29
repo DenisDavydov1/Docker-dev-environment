@@ -1,0 +1,16 @@
+FROM amd64/ubuntu:23.10
+
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN \
+  apt-get update && \
+  apt-get install -y apt-file && \
+  apt-file update && \
+  apt-get -y upgrade && \
+  apt-get install -y tree vim curl git tmux \
+    libssl-dev openssh-client ca-certificates \
+    libfontconfig1 \
+    dotnet-sdk-6.0 dotnet-sdk-7.0 dotnet-sdk-8.0
+
+CMD ["/bin/bash"]
